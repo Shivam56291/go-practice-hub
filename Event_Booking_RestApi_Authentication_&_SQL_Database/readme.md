@@ -98,6 +98,6 @@ graph LR
 
 Author: Shivam Building scalable backends, one line at a time.
 
-<img src="https://www.google.com/search?q=https://raw.githubusercontent.com/MariaLetta/free-gophers-pack/master/characters/png/7.png" width="60" alt="Gopher">
+<img src="https://raw.githubusercontent.com/MariaLetta/free-gophers-pack/master/characters/png/7.png" width="60" alt="Gopher">
 
 </div>

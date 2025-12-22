@@ -1,0 +1,2 @@
+### DELETE /events/:id
+DELETE http://localhost:8080/events/3
