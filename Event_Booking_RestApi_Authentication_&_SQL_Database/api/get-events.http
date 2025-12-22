@@ -1,2 +1,2 @@
-### GET /ping
+### GET /events
 GET http://localhost:8080/events
