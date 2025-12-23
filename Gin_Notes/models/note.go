@@ -20,3 +20,25 @@ func NotesAll() *[]Note {
 	DB.Where("deleted_at IS NULL").Order("updated_at DESC").Find(&notes)
 	return &notes
 }
+
+func NotesCreate(name string, content string) *Note {
+	entry := Note{Name: name, Content: content}
+	DB.Create(&entry)
+	return &entry
+}
+
+func NotesFind(id uint64) *Note {
+	var note Note
+	DB.Where("id=?", id).First(&note)
+	return &note
+}
+
+func (n *Note) Update(name string, content string) {
+	n.Name = name
+	n.Content = content
+	DB.Save(n)
+}
+
+func NotesMarkDeleted(id uint64) {
+	DB.Where("id=?", id).Delete(&Note{})
+}

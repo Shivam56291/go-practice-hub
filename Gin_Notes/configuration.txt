@@ -2,6 +2,8 @@
 go get github.com/gin-gonic/gin
 go get gorm.io/gorm
 go get gorm.io/driver/mysql
+go get golang.org/x/crypto/bcrypt
+go get github.com/gin-contrib/sessions
 
 
 --SQL--------------------------------------------------
