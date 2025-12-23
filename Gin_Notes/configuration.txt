@@ -1,0 +1,27 @@
+--Installs---------------------------------------------
+go get github.com/gin-gonic/gin
+go get gorm.io/gorm
+go get gorm.io/driver/mysql
+
+
+--SQL--------------------------------------------------
+
+--1---
+CREATE USER 'notes'@'localhost' IDENTIFIED BY 'tmp_pwd';
+
+--2---
+CREATE DATABASE notes;
+
+--3---
+GRANT ALL PRIVILEGES ON notes.* TO 'notes'@'localhost';
+
+--4---
+FLUSH PRIVILEGES;
+
+--5---
+ALTER USER 'notes'@'localhost' IDENTIFIED BY 'notes';
+
+
+--Extra------------------------------------------------
+
+go fmt ./... | for format all .go files
