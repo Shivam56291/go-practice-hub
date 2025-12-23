@@ -3,19 +3,32 @@ package main
 import (
 	"event-booking-api/db"
 	"event-booking-api/routes"
+	"log"
+	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	db.InitDB()
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Could not load .env file")
+	}
 
-  server := gin.Default()
+	err = db.InitDB()
+	if err != nil {
+		panic("Could not initialize database: " + err.Error())
+	}
 
-  routes.RegisterRoutes(server)
+	server := gin.Default()
 
-  server.Run(":8080")
+	routes.RegisterRoutes(server)
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	server.Run(":" + port)
 }
-
-
-

@@ -2,26 +2,33 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
+	"os"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
 var DB *sql.DB
 
-func InitDB() {
+func InitDB() error {
 	var err error
-	DB, err = sql.Open("sqlite3", "api.db")
-	if err != nil {
-		panic("Failed to connect to the database.")
+	dbName := os.Getenv("DB_NAME")
+	if dbName == "" {
+		dbName = "api.db"
 	}
-	
+
+	DB, err = sql.Open("sqlite3", dbName)
+	if err != nil {
+		return fmt.Errorf("could not connect to database: %w", err)
+	}
+
 	DB.SetMaxOpenConns(10)
 	DB.SetMaxIdleConns(5)
 
-	createTables()
+	return createTables()
 }
 
-func createTables() {
+func createTables() error {
 
 	createUsersTable := `
 	CREATE TABLE IF NOT EXISTS users (
@@ -31,7 +38,7 @@ func createTables() {
 	)`
 	_, err := DB.Exec(createUsersTable)
 	if err != nil {
-		panic("Failed to create users table.")
+		return fmt.Errorf("could not create users table: %w", err)
 	}
 
 	createEventsTable := `
@@ -47,6 +54,20 @@ func createTables() {
 
 	_, err = DB.Exec(createEventsTable)
 	if err != nil {
-		panic("Failed to create events table.")
+		return fmt.Errorf("could not create events table: %w", err)
 	}
+
+	createRegistrationsTable := `
+	CREATE TABLE IF NOT EXISTS registrations (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		event_id INTEGER,
+		user_id INTEGER,
+		FOREIGN KEY (event_id) REFERENCES events(id),
+		FOREIGN KEY (user_id) REFERENCES users(id)
+	)`
+	_, err = DB.Exec(createRegistrationsTable)
+	if err != nil {
+		return fmt.Errorf("could not create registrations table: %w", err)
+	}
+	return nil
 }

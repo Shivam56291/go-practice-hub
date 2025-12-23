@@ -38,7 +38,7 @@ func (u *User) Save() error {
 	return nil
 }
 
-func (u User) ValidateCredentials() error {
+func (u *User) ValidateCredentials() error {
 
 	query := `SELECT id, password FROM users WHERE email = ?`
 	row := db.DB.QueryRow(query, u.Email)
@@ -48,7 +48,7 @@ func (u User) ValidateCredentials() error {
 	if err != nil {
 		return errors.New("invalid credentials")
 	}
-	
+
 	if utils.CheckPasswordHash(u.Password, retrievedPassword) {
 		return nil
 	}

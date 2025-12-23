@@ -1,0 +1,4 @@
+### DELETE /events/:id/unregister
+DELETE http://localhost:8080/events/1/unregister
+content-type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzY2NDcyNzMzLCJ1c2VySWQiOjJ9.0CW-sr1IqnsKFQpMrrdVpmK1O6XRml8-uEHFqYAba6I

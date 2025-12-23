@@ -2,23 +2,26 @@ package utils
 
 import (
 	"errors"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-const secretKey = "se92389f98rh293hffhi39r93u28ru938urret"
+
+var secretKey = os.Getenv("JWT_SECRET")
+
 
 func GenerateToken(email string, userId int64) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"email": email,
+		"email":  email,
 		"userId": userId,
-		"exp": time.Now().Add(time.Hour * 2).Unix(),
+		"exp":    time.Now().Add(time.Hour * 2).Unix(),
 	})
 	return token.SignedString([]byte(secretKey))
 }
 
-func VerifyToken(tokenString string) error {
+func VerifyToken(tokenString string) (int64, error) {
 	parsedToken, err := jwt.ParseWithClaims(
 		tokenString,
 		jwt.MapClaims{},
@@ -31,12 +34,24 @@ func VerifyToken(tokenString string) error {
 	)
 
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	if !parsedToken.Valid {
-		return errors.New("invalid token")
+		return 0, errors.New("invalid token")
 	}
 
-	return nil
+	claims, ok := parsedToken.Claims.(jwt.MapClaims)
+	if !ok {
+		return 0, errors.New("invalid claims")
+	}
+
+	// JWT numbers are float64
+	userIDFloat, ok := claims["userId"].(float64)
+	if !ok {
+		return 0, errors.New("userId not found in token")
+	}
+
+	userID := int64(userIDFloat)
+	return userID, nil
 }

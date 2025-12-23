@@ -1,14 +1,17 @@
 package models
 
-import "event-booking-api/db"
+import (
+	"errors"
+	"event-booking-api/db"
+)
 
 type Event struct {
-	ID          int64    `json:"id"`
+	ID          int64  `json:"id"`
 	Name        string `json:"name" binding:"required"`
 	Description string `json:"description" binding:"required"`
 	Location    string `json:"location" binding:"required"`
 	DateTime    string `json:"dateTime" binding:"required"`
-	UserID      int    `json:"user_id"`
+	UserID      int64  `json:"user_id"`
 }
 
 func (e *Event) Save() error {
@@ -29,7 +32,7 @@ func (e *Event) Save() error {
 		return err
 	}
 	e.ID = id
-	return err;
+	return err
 }
 
 func GetAllEvents() ([]Event, error) {
@@ -50,6 +53,11 @@ func GetAllEvents() ([]Event, error) {
 
 		events = append(events, event)
 	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
 	return events, nil
 }
 
@@ -94,3 +102,42 @@ func (event Event) Delete() error {
 	}
 	return nil
 }
+
+func (e Event) Register(user_id int64) error {
+	query := `INSERT INTO registrations (event_id, user_id) VALUES (?, ?)`
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(e.ID, user_id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+
+func (e *Event) CancelRegistration(userID int64) error {
+	result, err := db.DB.Exec(
+		`DELETE FROM registrations WHERE event_id = ? AND user_id = ?`,
+		e.ID,
+		userID,
+	)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return errors.New("registration not found or already cancelled")
+	}
+
+	return nil
+}
+
