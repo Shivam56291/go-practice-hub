@@ -30,16 +30,16 @@
 
 ### 🚀 The Journey
 
-> *"A personal journey exploring Go, building skills, and mastering concepts through hands-on projects."*
+> _"A personal journey exploring Go, building skills, and mastering concepts through hands-on projects."_
 
 I learn by **breaking stuff**, **fixing it**, and **optimizing**. This repository is a collection of my experiments, from simple APIs to complex structural patterns.
 
 <br/>
 
-| 💡 **Focus** | 🛠 **Practice** | 📈 **Growth** |
-| :---: | :---: | :---: |
-| Clean Architecture | RESTful APIs | Production Standards |
-| Concurrency | Database Design | Modern Tooling |
+|    💡 **Focus**    | 🛠 **Practice**  |    📈 **Growth**     |
+| :----------------: | :-------------: | :------------------: |
+| Clean Architecture |  RESTful APIs   | Production Standards |
+|    Concurrency     | Database Design |    Modern Tooling    |
 
 </div>
 
@@ -51,13 +51,15 @@ I learn by **breaking stuff**, **fixing it**, and **optimizing**. This repositor
 
 <br/>
 
-| Directory | Description | Tech |
-| :--- | :--- | :---: |
-| **`📂 /event-booking-api`** | *Event management system with JWT Auth* | `Gin` `Auth` |
+| Directory                                                     | Description                                                 |             Tech             |
+| :------------------------------------------------------------ | :---------------------------------------------------------- | :--------------------------: |
+| **`📂 /Event_Booking_RestApi_Authentication_&_SQL_Database`** | _Event booking REST API with authentication & SQL database_ |      `Gin` `Auth` `SQL`      |
+| **`📂 /Gin_Notes`**                                           | _Notes manager with full CRUD & authentication_             |     `Gin` `GORM` `MySQL`     |
+| **`📂 /Blog`**                                                | _Minimal blog app with auth & articles_                     | `Gin` `MySQL` `GORM` `Viper` |
 
 <br/>
 
-*Each folder contains its own `README.md` with specific setup instructions.*
+_Each folder contains its own `README.md` with specific setup instructions._
 
 </div>
 
@@ -99,7 +101,7 @@ go run main.go
 
 <br/>
 
-***Keep Coding. Keep Compiling.** 💙*
+**\*Keep Coding. Keep Compiling.** 💙\*
 
 [![GitHub stars](https://img.shields.io/github/stars/Shivam56291/go-practice-hub?style=social)](https://github.com/Shivam56291/go-practice-hub)
 
