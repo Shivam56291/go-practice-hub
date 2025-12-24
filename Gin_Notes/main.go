@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"notes_application/controllers"
+	"notes_application/controllers/helpers_in"
 	"notes_application/middlewares"
 	"notes_application/models"
 
@@ -16,6 +17,7 @@ func main() {
 	r := gin.Default()
 
 	r.Static("/vendor", "./static/vendor")
+	r.Static("/assets", "./static")
 
 	r.LoadHTMLGlob("templates/**/**")
 
@@ -27,13 +29,14 @@ func main() {
 
 	r.Use(middlewares.AuthenticateUser())
 
-	r.GET("/notes", controllers.NotesIndex)
-	r.GET("/notes/new", controllers.NotesNew)
-	r.POST("/notes", controllers.NotesCreate)
-	r.GET("/notes/:id", controllers.NotesShow)
-	r.GET("/notes/edit/:id", controllers.NotesEditPage)
-	r.POST("/notes/:id", controllers.NotesUpdate)
-	r.DELETE("/notes/:id", controllers.NotesDelete)
+	notes := r.Group("/notes")
+	notes.GET("", controllers.NotesIndex)
+	notes.GET("/new", controllers.NotesNew)
+	notes.POST("", controllers.NotesCreate)
+	notes.GET("/:id", controllers.NotesShow)
+	notes.GET("/edit/:id", controllers.NotesEditPage)
+	notes.POST("/:id", controllers.NotesUpdate)
+	notes.DELETE("/:id", controllers.NotesDelete)
 
 	r.GET("/signup", controllers.SignupPage)
 	r.GET("/login", controllers.LoginPage)
@@ -44,10 +47,9 @@ func main() {
 	r.GET("/logout", controllers.Logout)
 
 	r.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "home/index.html", gin.H{
-			"title":     "Notes Application",
-			"logged_in": (c.GetUint64("user_id") > 0),
-		})
+		c.HTML(http.StatusOK, "home/index.html", helpers_in.SetPayload(c, gin.H{
+			"title": "Notes Application",
+		}))
 	})
 
 	log.Println("Listening and serving HTTP on :8080")

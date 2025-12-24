@@ -7,14 +7,13 @@ import (
 
 func SessionSet(c *gin.Context, userID uint64) {
 	session := sessions.Default(c)
-	var idInterface interface{} = &userID
-	session.Set("id", idInterface)
+	session.Set("user_id", userID)
 	session.Save()
 }
 
 func SessionGet(c *gin.Context) uint64 {
 	session := sessions.Default(c)
-	return session.Get("id").(uint64)
+	return session.Get("user_id").(uint64)
 }
 
 func SessionClear(c *gin.Context) {

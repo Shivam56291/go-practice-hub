@@ -1,24 +1,52 @@
-{{define "notes/index.html"}} {{template "layouts/header.html"}}
-<h1>All Notes</h1>
+{{define "notes/index.html"}} {{template "layouts/header.html" .}}
 
-<div class="row row-cols-1 row-cols-md-6 g-4">
-  {{ with .notes}} {{range .}}
-  <div class="col">
-    <div class="card h-200">
-      <h5 class="card-title">{{.Name}}</h5>
-      <p class="card-text">{{.Content}}</p>
-      <a class="btn btn-outline-primary" href="/notes/{{.ID}}" role="button"
-        >View</a
-      >
-    </div>
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <h1 class="display-5 fw-bold text-dark">My Notes</h1>
+    <a class="btn btn-primary btn-lg shadow-sm" href="/notes/new">
+      <i class="bi bi-plus-lg"></i> + New Note
+    </a>
   </div>
-  {{end}} {{end}}
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    {{ range .notes}}
+    <div class="col" style="animation: fadeIn 0.5s ease-out">
+      <div class="card h-100 border-0 shadow-sm hover-card">
+        <div class="card-body">
+          <h5 class="card-title fw-bold text-primary mb-3">{{.Name}}</h5>
+          <p
+            class="card-text text-muted mb-4"
+            style="
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 3;
+              -webkit-box-orient: vertical;
+            "
+          >
+            {{.Content}}
+          </p>
+          <a
+            href="/notes/{{.ID}}"
+            class="btn btn-outline-primary btn-sm stretched-link"
+            >Read More</a
+          >
+        </div>
+        <div class="card-footer bg-transparent border-0 text-muted small">
+          <small>Last updated: {{.UpdatedAt.Format "Jan 02, 2006"}}</small>
+        </div>
+      </div>
+    </div>
+    {{else}}
+    <div class="col-12 text-center mt-5">
+      <div class="py-5">
+        <h3 class="text-muted">No notes yet!</h3>
+        <p class="text-muted mb-4">Create your first note to get started.</p>
+        <a class="btn btn-primary" href="/notes/new">Create Note</a>
+      </div>
+    </div>
+    {{end}}
+  </div>
 </div>
 
-<p>
-  <a class="btn btn-outline-primary" href="/notes/new" role="button"
-    >Add New Note</a
-  >
-</p>
-
-{{template "layouts/footer.html"}} {{end}}
+{{template "layouts/footer.html" .}} {{end}}

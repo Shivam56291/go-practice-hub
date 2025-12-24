@@ -25,26 +25,20 @@ func Signup(c *gin.Context) {
 	availabe := models.UserCheckAvailability(email)
 	if !availabe {
 		helpers_in.SetFlash(c, "Email already exists")
-		c.HTML(http.StatusOK, "home/signup.html", gin.H{
-			"alert": helpers_in.GetFlash(c),
-		})
+		c.HTML(http.StatusOK, "home/signup.html", helpers_in.SetPayload(c, gin.H{}))
 		return
 	}
 
 	if password != confirmPassword {
 		helpers_in.SetFlash(c, "Passwords do not match")
-		c.HTML(http.StatusNotAcceptable, "home/signup.html", gin.H{
-			"alert": helpers_in.GetFlash(c),
-		})
+		c.HTML(http.StatusNotAcceptable, "home/signup.html", helpers_in.SetPayload(c, gin.H{}))
 		return
 	}
 
 	user := models.UserCreate(email, password)
 	if user.ID == 0 {
 		helpers_in.SetFlash(c, "Unable to create user")
-		c.HTML(http.StatusInternalServerError, "home/signup.html", gin.H{
-			"alert": helpers_in.GetFlash(c),
-		})
+		c.HTML(http.StatusInternalServerError, "home/signup.html", helpers_in.SetPayload(c, gin.H{}))
 	} else {
 		helpers.SessionSet(c, user.ID)
 		helpers_in.SetFlash(c, "Signup successful")
@@ -63,9 +57,7 @@ func Login(c *gin.Context) {
 		c.Redirect(http.StatusSeeOther, "/")
 	} else { // invalid login
 		helpers_in.SetFlash(c, "Invalid credentials")
-		c.HTML(http.StatusOK, "home/login.html", gin.H{
-			"alert": helpers_in.GetFlash(c),
-		})
+		c.HTML(http.StatusOK, "home/login.html", helpers_in.SetPayload(c, gin.H{}))
 	}
 }
 

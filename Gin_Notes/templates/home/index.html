@@ -1,16 +1,48 @@
-{{define "home/index.html"}} {{template "layouts/header.html"}}
-<h1>{{.title}}</h1>
-<p>
-  <div class="btn-group" role="group">
-    {{if .logged_in}}
-      <form action="/logout" method="GET">
-  <button type="submit" class="btn btn-outline-primary">Logout</button>
-</form>
+{{define "home/index.html"}} {{template "layouts/header.html" .}}
 
-    {{else}}
-      <a href="/login" class="btn btn-outline-primary" role="button">Login</a>
-      <a href="/signup" class="btn btn-outline-primary" role="button">Sign Up</a>
-    {{end}}
+<div class="container text-center mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h1
+        class="display-3 fw-bold mb-4"
+        style="animation: slideInDown 0.8s ease-out"
+      >
+        Welcome to <span style="color: #11998e">Notes App</span>
+      </h1>
+      <p class="lead text-muted mb-5" style="animation: fadeIn 1.2s ease-out">
+        Capture your thoughts, ideas, and lists in one secure place. Simple,
+        fast, and elegantly designed for your productivity.
+      </p>
+
+      <div
+        class="d-flex justify-content-center gap-3"
+        style="animation: fadeIn 1.5s ease-out"
+      >
+        {{if .logged_in}}
+        <a href="/notes" class="btn btn-primary btn-lg px-5 shadow-lg"
+          >GO TO MY NOTES</a
+        >
+        {{else}}
+        <a href="/signup" class="btn btn-primary btn-lg px-5 shadow-lg"
+          >Get Started</a
+        >
+        <a href="/login" class="btn btn-outline-secondary btn-lg px-5">Login</a>
+        {{end}}
+      </div>
+
+      <div class="mt-5 pt-5" style="animation: fadeIn 2s ease-out">
+        <img
+          src="/assets/image/notes.png"
+          alt="Notes Illustration"
+          class="img-fluid"
+          style="
+            max-height: 400px;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+          "
+        />
+      </div>
+    </div>
   </div>
-</p>
-{{template "layouts/footer.html"}} {{end}}
+</div>
+
+{{template "layouts/footer.html" .}} {{end}}

@@ -1,19 +1,66 @@
-{{ define "home/login.html"}}
-{{ template "layouts/header.html"}}
+{{ define "home/login.html"}} {{ template "layouts/header.html" .}}
 
-  <h1>Login</h1>
-  <form action="/login" method="POST">
-    <div class="mb-3">
-      <label for="email" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email">
-      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-    </div>
-    <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="password" name="password">
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-  </form>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div
+        class="card border-0 shadow-lg"
+        style="animation: fadeIn 0.5s ease-out"
+      >
+        <div class="card-body p-5">
+          <div class="text-center mb-4">
+            <h2 class="fw-bold text-primary mb-2">Welcome Back</h2>
+            <p class="text-muted">Please login to your account</p>
+          </div>
 
-{{ template "layouts/footer.html"}}
-{{ end}}
+          <form action="/login" method="POST">
+            <div class="mb-4">
+              <label
+                for="email"
+                class="form-label fw-bold small text-uppercase text-muted"
+                >Email address</label
+              >
+              <input
+                type="email"
+                class="form-control form-control-lg"
+                id="email"
+                name="email"
+                placeholder="name@example.com"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label
+                for="password"
+                class="form-label fw-bold small text-uppercase text-muted"
+                >Password</label
+              >
+              <input
+                type="password"
+                class="form-control form-control-lg"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Login
+              </button>
+            </div>
+          </form>
+
+          <div class="text-center mt-4">
+            <span class="text-muted">Don't have an account?</span>
+            <a href="/signup" class="text-primary text-decoration-none fw-bold"
+              >Sign up</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ template "layouts/footer.html" .}} {{ end}}

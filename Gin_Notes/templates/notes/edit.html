@@ -1,29 +1,60 @@
-{{ define "notes/edit.html"}} {{template "layouts/header.html"}}
-<h1>Edit Note</h1>
+{{define "notes/edit.html"}} {{template "layouts/header.html" .}}
 
-{{range .}}
-<form class="row g-3" action="/notes/{{.ID}}" method="POST">
-  <div class="mb-3">
-    <label for="name" class="form-label">Name</label>
-    <input
-      type="text"
-      class="form-control"
-      id="name"
-      aria-describedby="nameHelp"
-      name="name"
-      value="{{.Name}}"
-    />
-    <div id="nameHelp" class="form-text">Title of the note</div>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div
+        class="card border-0 shadow-lg"
+        style="animation: slideInDown 0.5s ease-out"
+      >
+        <div class="card-body p-5">
+          <h2 class="fw-bold text-primary mb-4">Edit Note</h2>
+
+          {{with .note}}
+          <form action="/notes/{{.ID}}" method="POST">
+            <div class="mb-4">
+              <label
+                for="name"
+                class="form-label fw-bold small text-uppercase text-muted"
+                >Title</label
+              >
+              <input
+                type="text"
+                class="form-control form-control-lg"
+                id="name"
+                name="name"
+                value="{{.Name}}"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label
+                for="content"
+                class="form-label fw-bold small text-uppercase text-muted"
+                >Content</label
+              >
+              <textarea
+                class="form-control"
+                id="content"
+                rows="8"
+                name="content"
+                required
+              >{{.Content}}</textarea>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <a href="/notes/{{.ID}}" class="btn btn-outline-secondary"
+                >Cancel</a
+              >
+              <button type="submit" class="btn btn-primary px-4">
+                Update Note
+              </button>
+            </div>
+          </form>
+          {{end}}
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="content" class="form-label">Content</label>
-    <textarea
-      class="form-control"
-      id="content"
-      rows="5"
-      name="content"
-    >{{.Content}}</textarea>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-{{end}} {{template "layouts/footer.html"}} {{end}}
+</div>
+
+{{template "layouts/footer.html" .}} {{end}}

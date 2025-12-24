@@ -14,29 +14,35 @@ func NotesIndex(c *gin.Context) {
 	currentUser := helpers_in.GetUserFromRequest(c)
 	if currentUser == nil || currentUser.ID == 0 {
 		helpers_in.SetFlash(c, "Please login to view your notes")
-		c.HTML(http.StatusUnauthorized, "home/index.html", gin.H{})
+		c.HTML(http.StatusUnauthorized, "home/index.html", helpers_in.SetPayload(c, gin.H{}))
 		return
 	}
 	notes := models.NotesAll(currentUser)
-	c.HTML(http.StatusOK, "notes/index.html", gin.H{
+	c.HTML(http.StatusOK, "notes/index.html", helpers_in.SetPayload(c, gin.H{
 		"notes": notes,
-	})
+		"email": currentUser.Username,
+	}))
 }
 
 func NotesNew(c *gin.Context) {
 	c.HTML(http.StatusOK, "notes/new.html", gin.H{})
 }
 
+type FormData struct {
+	Name    string `form:"name"`
+	Content string `form:"content"`
+}
+
 func NotesCreate(c *gin.Context) {
 	currentUser := helpers_in.GetUserFromRequest(c)
 	if currentUser == nil || currentUser.ID == 0 {
 		helpers_in.SetFlash(c, "Please login to view your notes")
-		c.HTML(http.StatusUnauthorized, "home/index.html", gin.H{})
+		c.HTML(http.StatusUnauthorized, "home/index.html", helpers_in.SetPayload(c, gin.H{}))
 		return
 	}
-	name := c.PostForm("name")
-	content := c.PostForm("content")
-	models.NotesCreate(currentUser, name, content)
+	var data FormData
+	c.Bind(&data)
+	models.NotesCreate(currentUser, data.Name, data.Content)
 	c.Redirect(http.StatusMovedPermanently, "/notes")
 }
 
@@ -44,7 +50,7 @@ func NotesShow(c *gin.Context) {
 	currentUser := helpers_in.GetUserFromRequest(c)
 	if currentUser == nil || currentUser.ID == 0 {
 		helpers_in.SetFlash(c, "Please login to view your notes")
-		c.HTML(http.StatusUnauthorized, "home/index.html", gin.H{})
+		c.HTML(http.StatusUnauthorized, "home/index.html", helpers_in.SetPayload(c, gin.H{}))
 		return
 	}
 	idStr := c.Param("id")
@@ -62,7 +68,7 @@ func NotesEditPage(c *gin.Context) {
 	currentUser := helpers_in.GetUserFromRequest(c)
 	if currentUser == nil || currentUser.ID == 0 {
 		helpers_in.SetFlash(c, "Please login to view your notes")
-		c.HTML(http.StatusUnauthorized, "home/index.html", gin.H{})
+		c.HTML(http.StatusUnauthorized, "home/index.html", helpers_in.SetPayload(c, gin.H{}))
 		return
 	}
 	idStr := c.Param("id")
@@ -80,16 +86,19 @@ func NotesUpdate(c *gin.Context) {
 	currentUser := helpers_in.GetUserFromRequest(c)
 	if currentUser == nil || currentUser.ID == 0 {
 		helpers_in.SetFlash(c, "Please login to view your notes")
-		c.HTML(http.StatusUnauthorized, "home/index.html", gin.H{})
+		c.HTML(http.StatusUnauthorized, "home/index.html", helpers_in.SetPayload(c, gin.H{}))
 		return
 	}
+
 	idStr := c.Param("id")
 	id, err := strconv.ParseUint(idStr, 10, 64)
 	if err != nil {
 		fmt.Printf("Error: %v", err)
 	}
+	var data FormData
+	c.Bind(&data)
 	note := models.NotesFind(currentUser, id)
-	note.Update(c.PostForm("name"), c.PostForm("content"))
+	note.Update(data.Name, data.Content)
 	c.Redirect(http.StatusSeeOther, "/notes/"+idStr)
 }
 
@@ -97,7 +106,7 @@ func NotesDelete(c *gin.Context) {
 	currentUser := helpers_in.GetUserFromRequest(c)
 	if currentUser == nil || currentUser.ID == 0 {
 		helpers_in.SetFlash(c, "Please login to view your notes")
-		c.HTML(http.StatusUnauthorized, "home/index.html", gin.H{})
+		c.HTML(http.StatusUnauthorized, "home/index.html", helpers_in.SetPayload(c, gin.H{}))
 		return
 	}
 	idStr := c.Param("id")
