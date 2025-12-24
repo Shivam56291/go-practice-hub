@@ -10,7 +10,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "help",
 	Short: "Help command",
-	Long: `Display help command`,
+	Long:  `Display help command`,
 }
 
 func Execute() {
