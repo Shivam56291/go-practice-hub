@@ -24,3 +24,13 @@ func (articleService *ArticleService) GetStoriesArticles() ArticleResponse.Artic
 	articles := articleService.articleRepository.List(6)
 	return ArticleResponse.ToArticles(articles)
 }
+
+func (articleService *ArticleService) Find(id int) (ArticleResponse.Article, error) {
+	var response ArticleResponse.Article
+	article, err := articleService.articleRepository.Find(id)
+	if err != nil {
+		return response, err
+	}
+	response = ArticleResponse.ToArticle(article)
+	return response, nil
+}
