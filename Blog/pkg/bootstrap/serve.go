@@ -5,6 +5,7 @@ import (
 	"Blog/pkg/database"
 	"Blog/pkg/html"
 	"Blog/pkg/routing"
+	"Blog/pkg/sessions"
 	"Blog/pkg/static"
 )
 
@@ -14,6 +15,8 @@ func Serve() {
 	database.Connect()
 
 	routing.Init()
+
+	sessions.Start(routing.GetRouter())
 
 	static.LoadStatic(routing.GetRouter())
 
