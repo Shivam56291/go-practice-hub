@@ -1,8 +1,12 @@
 package services
 
 import (
+	ArticleModel "Blog/internal/modules/article/models"
 	ArticleRepository "Blog/internal/modules/article/repositories"
+	"Blog/internal/modules/article/requests/articles"
 	ArticleResponse "Blog/internal/modules/article/responses"
+	UserResponse "Blog/internal/modules/user/responses"
+	"errors"
 )
 
 type ArticleService struct {
@@ -27,10 +31,22 @@ func (articleService *ArticleService) GetStoriesArticles() ArticleResponse.Artic
 
 func (articleService *ArticleService) Find(id int) (ArticleResponse.Article, error) {
 	var response ArticleResponse.Article
-	article, err := articleService.articleRepository.Find(id)
-	if err != nil {
-		return response, err
+	article := articleService.articleRepository.Find(id)
+
+	if article.ID == 0 {
+		return response, errors.New("Article not found")
 	}
-	response = ArticleResponse.ToArticle(article)
-	return response, nil
+	return ArticleResponse.ToArticle(article), nil
+}
+
+func (articleService *ArticleService) StoreAsUser(request articles.StoreRequest, user UserResponse.User) (ArticleResponse.Article, error) {
+	var article ArticleModel.Article
+	article.Title = request.Title
+	article.Content = request.Content
+	article.UserID = user.ID
+	newArticle := articleService.articleRepository.Create(article)
+	if newArticle.ID == 0 {
+		return ArticleResponse.Article{}, errors.New("Error in creating article")
+	}
+	return ArticleResponse.ToArticle(newArticle), nil
 }

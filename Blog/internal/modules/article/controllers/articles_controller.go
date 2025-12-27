@@ -1,8 +1,15 @@
 package controllers
 
 import (
+	"Blog/internal/modules/article/requests/articles"
 	ArticleService "Blog/internal/modules/article/services"
+	"Blog/internal/modules/user/helpers"
+	"Blog/pkg/converters"
+	"Blog/pkg/errors"
 	"Blog/pkg/html"
+	"Blog/pkg/old"
+	"Blog/pkg/sessions"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -43,4 +50,37 @@ func (controller *Controller) Show(c *gin.Context) {
 		"title":   "Show Article",
 		"article": article,
 	})
+}
+
+func (controller *Controller) Create(c *gin.Context) {
+	html.Render(c, http.StatusOK, "modules/article/html/create", gin.H{
+		"title": "Create Article",
+	})
+}
+
+func (controller *Controller) Store(c *gin.Context) {
+	var request articles.StoreRequest
+
+	if err := c.ShouldBind(&request); err != nil {
+		errors.Init()
+		errors.SetFromErrors(err)
+		sessions.Set(c, "errors", converters.MapToString(errors.Get()))
+
+		old.Init()
+		old.Set(c)
+		sessions.Set(c, "old", converters.UrlValuesToString(old.Get()))
+
+		c.Redirect(http.StatusSeeOther, "/articles/create")
+		return
+	}
+
+	user := helpers.Auth(c)
+
+	article, err := controller.articleService.StoreAsUser(request, user)
+	if err != nil {
+		c.Redirect(http.StatusNotFound, "/articles/create")
+		return
+	}
+
+	c.Redirect(http.StatusSeeOther, fmt.Sprint("/articles/", article.ID))
 }

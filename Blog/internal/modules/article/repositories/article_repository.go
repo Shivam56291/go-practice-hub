@@ -21,10 +21,13 @@ func (articleRepository *ArticleRepository) List(limit int) []ArticleModel.Artic
 	return articles
 }
 
-func (articleRepository *ArticleRepository) Find(id int) (ArticleModel.Article, error) {
+func (articleRepository *ArticleRepository) Find(id int) ArticleModel.Article {
 	var article ArticleModel.Article
-	if err := articleRepository.DB.Joins("User").First(&article, id).Error; err != nil {
-		return article, err
-	}
-	return article, nil
+	articleRepository.DB.Joins("User").First(&article, id)
+	return article
+}
+
+func (articleRepository *ArticleRepository) Create(article ArticleModel.Article) ArticleModel.Article {
+	articleRepository.DB.Create(&article)
+	return article
 }
