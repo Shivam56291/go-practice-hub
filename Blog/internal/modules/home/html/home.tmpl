@@ -27,7 +27,13 @@
 				<div class="col-md-7">
 					<div class="card-block">
 						<h2 class="card-title"><a href="/articles/{{ .ID }}">{{ .Title }}</a></h2>
-						<h4 class="card-text">{{ .Content }}</h4>
+						<h4 class="card-text">
+						{{ if gt (len .Content) 125 }}
+						    {{ slice .Content 0 125 }}...
+						{{ else }}
+						    {{ .Content }}
+						{{ end }}
+						</h4>
 						<div class="metafooter">
 							<div class="wrapfooter">
 								<span class="meta-footer-thumb">
@@ -67,7 +73,12 @@
 			</a>
 			<div class="card-block">
 				<h2 class="card-title"><a href="/articles/{{ .ID }}">{{ .Title }}</a></h2>
-				<h4 class="card-text">{{ .Content }}</h4>
+				<h4 class="card-text">
+				{{ if gt (len .Content) 160 }}
+					{{ slice .Content 0 160 }}...
+				{{ else }}
+					{{ .Content }}	
+				{{ end }}</h4>
 				<div class="metafooter">
 					<div class="wrapfooter">
 						<span class="meta-footer-thumb">
